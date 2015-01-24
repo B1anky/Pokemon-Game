@@ -407,7 +407,6 @@ class Character:
 	def updateStatus(self):
 		if self.returnAllSpeeds() == 0:
 			self.setStatus("idle")
-
 		else:
 			self.setStatus("walking") 
 
@@ -485,7 +484,6 @@ class Character:
 		  "left": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingRight()),
 		  "right": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft()),
 		  "idle": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight())
-
 		}[dir]
 		return result
 	

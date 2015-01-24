@@ -105,38 +105,43 @@ class Player(Character):
 					size = Event.size
 					mainLoopModule.screen = display.set_mode(size, windowControl.video_flags)
 
+
+		if not self.checkMoving("idle"):
+			self.setStatus("idle")
+
 		if self.returnTargetX() == self.returnX() and self.returnTargetY() == self.returnY():
 			self.setAllPush(False) 
 
-		#A key is pressed
-		if keyPressed[K_a] and not self.checkMoving("left"):
-			self.setPushingLeft(True)
-			self.setFace("left")
-			self.moveLeft()
-			self.setStatus("walking")
+			#A key is pressed
+			if keyPressed[K_a] and not self.checkMoving("left"):
+				self.setPushingLeft(True)
+				self.setFace("left")
+				self.moveLeft()
+				
 
-		#D key is pressed
-		if keyPressed[K_d]: #and not self.checkMoving("right"):
-			self.setPushingRight(True)
-			self.setFace("right")
-			self.moveRight()
-			self.setStatus("walking")
+			#D key is pressed
+			if keyPressed[K_d] and not self.checkMoving("right"):
+				self.setPushingRight(True)
+				self.setFace("right")
+				self.moveRight()
+				self.setStatus("walking")
 
-		#W key is pressed
-		if keyPressed[K_w] and not self.checkMoving("up"):
-			self.setPushingUp(True)
-			self.setFace("up")
-			self.moveUp()
-			self.setStatus("walking")
-			
-		#S key is pressed
-		if keyPressed[K_s] and not self.checkMoving("down"):
-			self.setPushingDown(True)
-			self.setFace("down")
-			self.moveDown()
-			self.setStatus("walking")
+			#W key is pressed
+			if keyPressed[K_w] and not self.checkMoving("up"):
+				self.setPushingUp(True)
+				self.setFace("up")
+				self.moveUp()
+				self.setStatus("walking")
+				
+			#S key is pressed
+			if keyPressed[K_s] and not self.checkMoving("down"):
+				self.setPushingDown(True)
+				self.setFace("down")
+				self.moveDown()
+				self.setStatus("walking")
 
 		#Checks to see when animations and walk cycles should end
+		'''
 		if keyPressed[K_a] == False:
 			self.setPushingLeft(False)
 			self.setLeftSpeed(0)
@@ -152,9 +157,7 @@ class Player(Character):
 		if keyPressed[K_s] == False:
 			self.setPushingDown(False)
 			self.setDownSpeed(0)
-
-		if not self.checkMoving("idle"):
-			self.setStatus("idle")
+		'''
 
 	#Calls all methods that manipulate character which need to constantly update
 	def updateAllPlayers(self, screen):

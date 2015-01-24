@@ -9,7 +9,7 @@ MAIN_SPRITES1 = None
 
 if os.name == 'nt':
 	MAIN_SPRITES = image.load("spriteSheet.gif")
-	MAIN_TILES1 = image.load("LittleRootSheet.png")
+	MAIN_TILES1 = image.load("yLittleRootSheet.png")
 else:
 	MAIN_SPRITES = image.load("spriteSheet.bmp")
 	MAIN_TILES1 = image.load("LittleRootSheet.bmp")
