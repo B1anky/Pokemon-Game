@@ -13,12 +13,11 @@ class Character:
 		defaultSprite = None, animTimer = 5, walkAnimCtr = 0, \
 		walkAnimCount = 0, idleAnimCtr = 0, idleAnimCount = 0, \
 		face = "down", widestSprite = None, tallestSprite = None,\
-		speed = 1, maxSpeed = 20, rightSpeed = 0, leftSpeed = 0,\
-		upSpeed = 0, downSpeed = 0, x = 200, y = 200, canLeaveScreen = True,\
+		x = 200, y = 200, canLeaveScreen = True,\
 		isOffBottom = False, isOffTop = False, isOffRight = False, isOffLeft = False,\
-		isOffScreen = False, status = "idle", isOn = "nothing", name = None, speedStat = 1, \
-		allSpeeds = 0, currentSprite = None, walkCoolDown = 0, walkDelay = 5, \
-		tileClock = time.Clock(), delta = 0):
+		isOffScreen = False, status = "idle", isOn = "nothing", name = None, \
+		currentSprite = None, walkCoolDown = 0, walkDelay = 5, \
+		tileClock = time.Clock(), delta = 0, tileCoords = ((0,0),(1,0),(),(),())):
 
 		#Sprite List initializers
 		self.__downIdleAnim = downIdleAnim
@@ -45,16 +44,6 @@ class Character:
 		self.__face = face
 		self.__widestSprite = widestSprite
 		self.__tallestSprite = tallestSprite
-		self.__speed = speed
-		self.__maxSpeed = maxSpeed
-		self.__rightSpeed = rightSpeed
-		self.__leftSpeed = leftSpeed
-		self.__upSpeed = upSpeed
-		self.__downSpeed = downSpeed
-
-		#**Special movement differential attributes not attached to object
-		self.__dx = self.__leftSpeed - self.__rightSpeed
-		self.__dy = self.__upSpeed - self.__downSpeed
 
 		#Rest of normal movement initializers
 		self.__x = x
@@ -77,8 +66,6 @@ class Character:
 
 		#Stats
 		self.__name = name
-		self.__speedStat = speedStat
-		self.__allSpeeds = rightSpeed + leftSpeed + upSpeed + downSpeed
 
 		#tile stuff
 		self.__walkCoolDown = walkCoolDown
@@ -190,66 +177,6 @@ class Character:
 	def returnTallestSprite(self):
 		return self.__tallestSprite
 
-	def setSpeed(self, speed):
-		self.__speed = speed
-
-	def returnSpeed(self):
-		return self.__speed
-
-	def setMaxSped(self, maxSpeed):
-		self.__maxSpeed = maxSpeed
-
-	def returnMaxSpeed(self):
-		return self.__maxSpeed
-
-	#Dx is the differntial in speed for the next tick for horizontal
-	def setRightSpeed(self, rightSpeed):
-		self.__rightSpeed = rightSpeed
-		self.__dx = self.__leftSpeed - self.__rightSpeed
-		self.__allSpeeds = self.__rightSpeed + self.__leftSpeed + self.__upSpeed + self.__downSpeed
-
-	def returnRightSpeed(self):
-		return self.__rightSpeed
-
-	#Dx is the differntial in speed for the next tick for horizontal
-	def setLeftSpeed(self, leftSpeed):
-		self.__leftSpeed = leftSpeed
-		self.__dx = self.__leftSpeed - self.__rightSpeed
-		self.__allSpeeds = self.__rightSpeed + self.__leftSpeed + self.__upSpeed + self.__downSpeed
-
-	def returnLeftSpeed(self):
-		return self.__leftSpeed
-
-	#Doesn't get its own mutator, relies on left/right speed mutators
-	def returnDx(self):
-		return self.__dx
-
-	#Dy is the differntial in speed for the next tick for vertical
-	def setUpSpeed(self, upSpeed):
-		self.__upSpeed = upSpeed
-		self.__dy = self.__upSpeed - self.__downSpeed
-		self.__allSpeeds = self.__rightSpeed + self.__leftSpeed + self.__upSpeed + self.__downSpeed
-
-	def returnUpSpeed(self):
-		return self.__upSpeed
-
-	#Dy is the differntial in speed for the next tick for vertical
-	def setDownSpeed(self, downSpeed):
-		self.__downSpeed = downSpeed
-		self.__dy = self.__upSpeed - self.__downSpeed
-		self.__allSpeeds = self.__rightSpeed + self.__leftSpeed + self.__upSpeed + self.__downSpeed
-
-	def returnDownSpeed(self):
-		return self.__downSpeed
-
-	#Doesn't get its own mutator, relies on up/down speed mutators
-	def returnDy(self):
-		return self.__dy
-
-	#Used for status indicator to check whether idle, walking, running, or on bike
-	def returnAllSpeeds(self):
-		return self.__allSpeeds
-
 	def setX(self, x):
 		self.__x = x
 
@@ -328,18 +255,6 @@ class Character:
 	def returnName(self):
 		return self.__name
 
-	def setSpeedStat(self, speedStat):
-		self.__speedStat = speedStat
-
-	def returnSpeedStat(self):
-		return self.__speedStat
-
-	def setAllSpeeds(self, allSpeedsl):
-		self.__allSpeeds = self.__rightSpeed + self.__leftSpeed + self.__upSpeed + self.__downSpeed
-
-	def returnAllSpeeds(self):
-		return self.__allSpeeds
-
 	def setCurrentSprite(self, currentSprite):
 		self.__currentSprite = currentSprite
 
@@ -383,32 +298,20 @@ class Character:
 
 	#Basic movement methods
 	def moveRight(self):
-		#if self.returnRightSpeed() < self.returnMaxSpeed():
-		#	self.setRightSpeed(self.returnSpeedStat() * self.returnSpeed())
-		self.setRightSpeed(self.returnSpeedStat() * self.returnSpeed())
 		self.setTargetX(self.returnTargetX() + TILEWIDTH)
 		self.setStatus("walking") 
 
 	def moveLeft(self):
-		self.setLeftSpeed(self.returnSpeedStat() * self.returnSpeed())
 		self.setTargetX(self.returnTargetX() - TILEWIDTH)
 		self.setStatus("walking") 
 
 	def moveUp(self):
-		self.setUpSpeed(self.returnSpeedStat() * self.returnSpeed())
 		self.setTargetY(self.returnTargetY() - TILEWIDTH)
 		self.setStatus("walking") 
 
 	def moveDown(self):
-		self.setDownSpeed(self.returnSpeedStat() * self.returnSpeed())
 		self.setTargetY(self.returnTargetY() + TILEWIDTH)
 		self.setStatus("walking") 
-
-	def updateStatus(self):
-		if self.returnAllSpeeds() == 0:
-			self.setStatus("idle")
-		else:
-			self.setStatus("walking") 
 
 	def animation(self):
 		#Idle while facing down
@@ -486,23 +389,11 @@ class Character:
 		  "idle": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight())
 		}[dir]
 		return result
-	
-	#dx and dy are private but don't call a mutator to change since neither are object attributes
-	#def updateCoords(self):
-		#if self.returnWalkCoolDown() > 0:
-			#self.__dx = (self.returnRightSpeed() - self.returnLeftSpeed())
-			#self.__dy = (self.returnDownSpeed() - self.returnUpSpeed())
-
-			#self.setAllSpeeds(self.returnRightSpeed() + self.returnLeftSpeed() + self.returnUpSpeed() + self.returnDownSpeed())
-
-			#self.setX(self.returnX() + self.returnDx())
-			#self.setY(self.returnY() + self.returnDy())
 
 	def updateTileClock(self):
 		#This is for changing from pixel based to time based movement for tiles
 		self.setDelta(self.returnTileClock().tick()/100.0)		
 		self.setWalkCoolDown(self.returnWalkCoolDown() - self.returnDelta())
-
 
 	#Drawing method
 	def draw(self, screen):
@@ -513,7 +404,6 @@ class Character:
 	def updateAll(self, screen):
 		self.updateTileClock()
 		self.animation()
-		#self.updateStatus()
 		self.updateCoords()
 		self.draw(screen)
 
@@ -535,14 +425,6 @@ class Character:
 				"\nFacing: " + str(self.__face) + \
 				"\nWidest sprite: " + str(self.__widestSprite) + \
 				"\nTallest sprite: "  + str(self.__tallestSprite) + \
-				"\nSpeed: " + str(self.__speed) + \
-				"\nMax speed: " + str(self.__maxSpeed) + \
-				"\nRight speed: " + str(self.__rightSpeed) + \
-				"\nLeft speed: " + str(self.__leftSpeed) + \
-				"\nUp speed: " + str(self.__upSpeed) + \
-				"\nDown speed: " + str(self.__downSpeed) + \
-				"\nDx: " + str(self.__dx) + \
-				"\nDy: " + str(self.__dy) + \
 				"\nX Coordinate: " + str(self.__x) + \
 				"\nY Coordinate: " + str(self.__y) + \
 				"\nCan Leave Screen: " + str(self.__canLeaveScreen) + \
@@ -552,6 +434,4 @@ class Character:
 				"\nIs off left of screen: " + str(self.__isOffLeft) + \
 				"\nIs off screen: " + str(self.__isOffScreen) + \
 				"\nStatus: " + str(self.__status) + \
-				"\nIs on: " + str(self.__isOn) + \
-				"\nSpeed stat: " + str(self.__speedStat) +\
-				"\nAll speeds together: " + str(self.__allSpeeds)
+				"\nIs on: " + str(self.__isOn)

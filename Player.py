@@ -15,11 +15,10 @@ class Player(Character):
 				 defaultSprite = None, animTimer = 5, walkAnimCtr = 0, \
 				walkAnimCount = 0, idleAnimCtr = 0, idleAnimCount = 0, \
 				face = "down", widestSprite = None, tallestSprite = None,\
-				speed = 1, maxSpeed = 20, rightSpeed = 0, leftSpeed = 0,\
-				upSpeed = 0, downSpeed = 0, x = 200, y = 200, canLeaveScreen = True,\
+				x = 200, y = 200, canLeaveScreen = True,\
 				isOffBottom = False, isOffTop = False, isOffRight = False, isOffLeft = False,\
-				isOffScreen = False, status = "idle", isOn = "nothing", name = None, speedStat = 1, \
-				allSpeeds = 0, currentSprite = None, walkCoolDown = 0, walkDelay = 5,  \
+				isOffScreen = False, status = "idle", isOn = "nothing", name = None, \
+				currentSprite = None, walkCoolDown = 0, walkDelay = 5,  \
 				tileClock = None, delta = 0, number = 0, pushingRight = False, \
 				pushingLeft = False, pushingUp = False, pushingDown = False, isPushing = False):
 
@@ -29,11 +28,10 @@ class Player(Character):
 							defaultSprite, animTimer, walkAnimCtr, \
 							walkAnimCount, idleAnimCtr, idleAnimCount, \
 							face, widestSprite, tallestSprite,\
-							speed, maxSpeed, rightSpeed, leftSpeed,\
-							upSpeed, downSpeed, x, y, canLeaveScreen,\
+							x, y, canLeaveScreen,\
 							isOffBottom, isOffTop, isOffRight, isOffLeft,\
-							isOffScreen, status, isOn, name, speedStat, \
-							allSpeeds, currentSprite, walkCoolDown, walkDelay, tileClock, \
+							isOffScreen, status, isOn, name, \
+							currentSprite, walkCoolDown, walkDelay, tileClock, \
 							delta)
 
 		self.__number = number
@@ -140,31 +138,10 @@ class Player(Character):
 				self.moveDown()
 				self.setStatus("walking")
 
-		#Checks to see when animations and walk cycles should end
-		'''
-		if keyPressed[K_a] == False:
-			self.setPushingLeft(False)
-			self.setLeftSpeed(0)
-
-		if keyPressed[K_d] == False:
-			self.setPushingRight(False)
-			self.setRightSpeed(0)
-
-		if keyPressed[K_w] == False:
-			self.setPushingUp(False)
-			self.setUpSpeed(0)
-
-		if keyPressed[K_s] == False:
-			self.setPushingDown(False)
-			self.setDownSpeed(0)
-		'''
-
 	#Calls all methods that manipulate character which need to constantly update
 	def updateAllPlayers(self, screen):
 		self.animation()
 		self.updateTileClock()
-		#self.updateStatus()
-		#self.updateCoords()
 		self.playerControl(screen)
 		self.draw(screen)
 
