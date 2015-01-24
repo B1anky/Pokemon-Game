@@ -22,26 +22,20 @@ def run():
 	#Immediately maximizes the screen upon starting, calls method in windowControl module
 	windowControl.SDL_Maximize()
 
-	#for tile in tileList2:
-	#	print(tile.returnTileCoords())
-	for player in objectLists[1]:
-		player.updateAllPlayers(screen)
-		print(player.checkMoving("idle"))
 
 	while keepGoing:
 		#Updates the display/objects by calling the objects' class update methods
 		
 		#Draw/updates the tiles to the screen
-		#for tile in tileList:
-		#		tile.updateAll(screen)
-
-		#Draw/updates grass tile
 		for tile in tileList2:
 			tile.updateAll(screen)
 
+		#Draw/updates grass tile
+
+
 		#Draws/updates characters
-		#for character in objectLists[0]:
-		#	character.updateAll(screen)
+		for character in objectLists[0]:
+			character.updateAll(screen)
 		
 		#Draws/updates players
 		for player in objectLists[1]:

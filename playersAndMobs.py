@@ -3,6 +3,7 @@ import Character
 import Player
 import spriteManagement
 from pygame import *
+import mapManagement
 
 def createPlayers():
 	createRed()
@@ -30,14 +31,18 @@ def createRed():
 	character1 = Character.Character(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
 		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "left", redWidest, \
-		redTallest, 0, 800, False, False, False, False, False, \
-		False, "walking", "ground", "Red", redLeftIdle, 0, 3, clock, clock.tick()/100.0)
+		redTallest, mapManagement.createTown1Grass()[0].returnDrawCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1], \
+		False, False, False, False, False, \
+		False, "walking", "ground", "Red", redLeftIdle, 0, 3, clock, clock.tick()/100.0, \
+		(mapManagement.createTown1Grass()[0].returnTileCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1]))
 
 	player1 = Player.Player(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
 		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "right", redWidest, \
-		redTallest, 1048, 790, False, False, False, False, False, \
+		redTallest, mapManagement.createTown1Grass()[0].returnDrawCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1],\
+		False, False, False, False, False, \
 		False, "idle", "ground", "Red", redRightIdle, 0, 3, clock, clock.tick()/100.0,\
+		(mapManagement.createTown1Grass()[0].returnTileCoords()[0], mapManagement.createTown1Grass()[0].returnTileCoords()[1]), \
 		False, False, False, False, False)
 
 	characterList = []

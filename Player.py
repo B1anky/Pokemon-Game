@@ -19,7 +19,7 @@ class Player(Character):
 				isOffBottom = False, isOffTop = False, isOffRight = False, isOffLeft = False,\
 				isOffScreen = False, status = "idle", isOn = "nothing", name = None, \
 				currentSprite = None, walkCoolDown = 0, walkDelay = 5,  \
-				tileClock = None, delta = 0, number = 0, pushingRight = False, \
+				tileClock = None, delta = 0, tileCoords = (0,0), number = 0, pushingRight = False, \
 				pushingLeft = False, pushingUp = False, pushingDown = False, isPushing = False):
 
 		Character.__init__(self, downIdleAnim, leftIdleAnim, upIdleAnim, \
@@ -32,7 +32,7 @@ class Player(Character):
 							isOffBottom, isOffTop, isOffRight, isOffLeft,\
 							isOffScreen, status, isOn, name, \
 							currentSprite, walkCoolDown, walkDelay, tileClock, \
-							delta)
+							delta, tileCoords)
 
 		self.__number = number
 		self.__pushingRight = pushingRight

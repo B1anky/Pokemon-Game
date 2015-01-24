@@ -17,7 +17,7 @@ class Character:
 		isOffBottom = False, isOffTop = False, isOffRight = False, isOffLeft = False,\
 		isOffScreen = False, status = "idle", isOn = "nothing", name = None, \
 		currentSprite = None, walkCoolDown = 0, walkDelay = 5, \
-		tileClock = time.Clock(), delta = 0, tileCoords = ((0,0),(1,0),(),(),())):
+		tileClock = time.Clock(), delta = 0, tileCoords = (0,0)):
 
 		#Sprite List initializers
 		self.__downIdleAnim = downIdleAnim
@@ -51,6 +51,7 @@ class Character:
 		self.__targetX = x 
 		self.__targetY = y
 		self.__spacing = TILEWIDTH/SCALE/4
+		self.__tileCoords = tileCoords
 
 		#Movement limiting attribute initializers
 		self.__canLeaveScreen = canLeaveScreen
@@ -201,6 +202,12 @@ class Character:
 	def returnTargetY(self):
 		return self.__targetY
 
+	def setTileCoords(self, tileCoords):
+		self.__tileCoords = tileCoords
+
+	def returnTileCoords(self):
+		return self.__tileCoords
+
 	def setCanLeaveScreen(self, canLeaveScreen):
 		self.__canLeaveScreen = canLeaveScreen
 
@@ -299,19 +306,27 @@ class Character:
 	#Basic movement methods
 	def moveRight(self):
 		self.setTargetX(self.returnTargetX() + TILEWIDTH)
-		self.setStatus("walking") 
+		self.setStatus("walking")
+		self.setTileCoords((self.returnTileCoords()[0] + 1, self.returnTileCoords()[1]))
+		print(self.returnTileCoords())
 
 	def moveLeft(self):
 		self.setTargetX(self.returnTargetX() - TILEWIDTH)
-		self.setStatus("walking") 
+		self.setStatus("walking")
+		self.setTileCoords((self.returnTileCoords()[0] - 1, self.returnTileCoords()[1]))
+		print(self.returnTileCoords())
 
 	def moveUp(self):
 		self.setTargetY(self.returnTargetY() - TILEWIDTH)
 		self.setStatus("walking") 
+		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] - 1))
+		print(self.returnTileCoords())
 
 	def moveDown(self):
 		self.setTargetY(self.returnTargetY() + TILEWIDTH)
-		self.setStatus("walking") 
+		self.setStatus("walking")
+		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] + 1))
+		print(self.returnTileCoords())
 
 	def animation(self):
 		#Idle while facing down
@@ -404,7 +419,6 @@ class Character:
 	def updateAll(self, screen):
 		self.updateTileClock()
 		self.animation()
-		self.updateCoords()
 		self.draw(screen)
 
 	def __str__(self):
