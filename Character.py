@@ -2,6 +2,7 @@
 #Basic Sprite class objects, but does not extend
 
 from pygame import *
+from pygame.font import *
 from scale import *
 import mainLoopModule
 
@@ -308,25 +309,25 @@ class Character:
 		self.setTargetX(self.returnTargetX() + TILEWIDTH)
 		self.setStatus("walking")
 		self.setTileCoords((self.returnTileCoords()[0] + 1, self.returnTileCoords()[1]))
-		print(self.returnTileCoords())
+		#print(self.returnTileCoords())
 
 	def moveLeft(self):
 		self.setTargetX(self.returnTargetX() - TILEWIDTH)
 		self.setStatus("walking")
 		self.setTileCoords((self.returnTileCoords()[0] - 1, self.returnTileCoords()[1]))
-		print(self.returnTileCoords())
+		#print(self.returnTileCoords())
 
 	def moveUp(self):
 		self.setTargetY(self.returnTargetY() - TILEWIDTH)
 		self.setStatus("walking") 
 		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] - 1))
-		print(self.returnTileCoords())
+		#print(self.returnTileCoords())
 
 	def moveDown(self):
 		self.setTargetY(self.returnTargetY() + TILEWIDTH)
 		self.setStatus("walking")
 		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] + 1))
-		print(self.returnTileCoords())
+		#print(self.returnTileCoords())
 
 	def animation(self):
 		#Idle while facing down
@@ -416,10 +417,55 @@ class Character:
 			(self.returnX() + self.returnCurrentSprite().returnAdjustX(),\
 			self.returnY() + self.returnCurrentSprite().returnAdjustY()))
 
+		font = Font(None, 36)
+		text = font.render("", 1, (10, 10, 10))
+		textpos = text.get_rect()
+		textpos.centerx = self.__x
+		textpos.centery = self.__y
+		screen.blit(text, textpos)
+
+
 	def updateAll(self, screen):
 		self.updateTileClock()
 		self.animation()
 		self.draw(screen)
+
+	def getDirty(self, tiles, tWidth, tHeight):
+		dirt = []
+		l = self.getBorderTileList(tWidth,tHeight)
+		for coord in l:
+			try:
+				dirt.append(tiles[coord[0]][coord[1]])
+			except:
+				pass
+		return dirt
+
+	def getBorderTileList(self, tWidth, tHeight):
+		lists = []
+		i = self.returnTileCoords()[0]
+		j = self.returnTileCoords()[1]
+
+		if i < tWidth and j < tHeight:
+			lists.append((i,j))
+		if i < tWidth and j+1 < tHeight:
+			lists.append((i,j+1))
+		if i+1 < tWidth and j < tHeight:
+			lists.append((i+1,j))
+		if i < tWidth and j-1 > 0:
+			lists.append((i,j-1))
+		if i-1 > 0 and j < tHeight:
+			lists.append((i-1,j))
+		if i+1 < tWidth and j+1 < tHeight:
+			lists.append((i+1,j+1))
+		if i-1 > 0 and j-1 > 0:
+			lists.append((i-1,j-1))
+		if i-1 > 0 and j+1 < tHeight:
+			lists.append((i-1,j+1))
+		if i+1 < tWidth and j-1 > 0:
+			lists.append((i+1,j-1))
+		
+		#print(lists)
+		return lists
 
 	def __str__(self):
 		return  "\nName: " + str(self.__name)   + \

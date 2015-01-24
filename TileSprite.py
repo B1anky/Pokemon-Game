@@ -107,7 +107,8 @@ class TileSprite:
 
 	def __str__(self):
 		return  "Tile type: " + str(self.__tileType) + \
-				"\nCoordinates: " + str(self.__coords) + \
+				"\nTile Coordinates: "  + str(self.__tileCoords) + \
+				"\nPixel Coordinates: " + str(self.__drawCoords) + \
 				"\nCurrent tile: " + str(self.__currentTile) + \
 				"\nItems: " + str(self.__items) + \
 				"\nEncounter rate: " + str(self.__encounterRate) + \
