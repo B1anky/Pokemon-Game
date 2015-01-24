@@ -446,6 +446,7 @@ class Character:
 		if self.returnWalkCoolDown() > 0:
 			self.__dx = (self.returnRightSpeed() - self.returnLeftSpeed())
 			self.__dy = (self.returnDownSpeed() - self.returnUpSpeed())
+
 			self.setAllSpeeds(self.returnRightSpeed() + self.returnLeftSpeed() + self.returnUpSpeed() + self.returnDownSpeed())
 
 			self.setX(self.returnX() + self.returnDx())

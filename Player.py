@@ -40,6 +40,8 @@ class Player(Character):
 		self.__pushingLeft = pushingLeft
 		self.__pushingUp = pushingUp
 		self.__pushingDown = pushingDown
+		self.__targetx = x
+		self.__targety = y
 
 	def setNumber(self, number):
 		self.__number = number
@@ -71,6 +73,13 @@ class Player(Character):
 	def returnPushingDown(self):
 		return self.__pushingDown
 
+	def setAllPush(self, boo):
+		self.setPushingLeft(boo)
+		self.setPushingRight(boo)
+		self.setPushingUp(boo)
+		self.setPushingDown(boo)
+
+	
 	#Below is what allows the user to interact with the sprite and window
 	def playerControl(self, screen):
 		event.pump()
@@ -97,84 +106,93 @@ class Player(Character):
 				elif Event.type == VIDEORESIZE:
 					size = Event.size
 					mainLoopModule.screen = display.set_mode(size, windowControl.video_flags)
-			
+		
+		self.returnCurrentSprite().updateSprite()
+		scale = self.returnCurrentSprite().returnScale()
+		tileWidth = scale * 16			
+
+		s2 = 1
+
+		if self.__targetx > self.returnX():
+			self.setX(self.returnX() + self.returnWalkDelay() * scale * s2)
+		if self.__targetx < self.returnX():
+			self.setX(self.returnX() - self.returnWalkDelay() * scale * s2)
+		if self.__targety > self.returnY():
+			self.setY(self.returnY() + self.returnWalkDelay() * scale * s2)	
+		if self.__targety < self.returnY():
+			self.setY(self.returnY() - self.returnWalkDelay() * scale * s2)	
+
+		if self.__targetx == self.returnX and self.__targety == self.returnY:
+			self.setAllPush(False) 
+
+
 		#A key is pressed
-		if keyPressed[K_a] and self.returnPushingRight() == False and \
-				self.returnPushingUp() == False and \
-				self.returnPushingDown() == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_a] and not self.moving("left") and self.returnWalkCoolDown() <= 0:
 			self.setPushingLeft(True)
 			self.setFace("left")
+			self.moveLeft()
+			self.setStatus("walking")
 			self.setWalkCoolDown(self.returnWalkDelay())
+			self.__targetx -= tileWidth
 
 		#D key is pressed
-		if keyPressed[K_d] and self.returnPushingLeft() == False and \
-				self.returnPushingUp() == False and \
-				self.returnPushingDown() == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_d] and not self.moving("right") and self.returnWalkCoolDown() <= 0:
 			self.setPushingRight(True)
 			self.setFace("right")
+			self.moveRight()
+			self.setStatus("walking")
 			self.setWalkCoolDown(self.returnWalkDelay())
+			self.__targetx += tileWidth
 
 		#W key is pressed
-		if keyPressed[K_w] and self.returnPushingRight() == False and \
-				self.returnPushingLeft() == False and \
-				self.returnPushingDown() == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_w] and not self.moving("up") and self.returnWalkCoolDown() <= 0:
 			self.setPushingUp(True)
 			self.setFace("up")
+			self.moveUp()
+			self.setStatus("walking")
 			self.setWalkCoolDown(self.returnWalkDelay())
+			self.__targety -= tileWidth
 
 		#S key is pressed
-		if keyPressed[K_s] and self.returnPushingRight() == False and \
-				self.returnPushingUp() == False and \
-				self.returnPushingLeft() == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_s] and not self.moving("down") and self.returnWalkCoolDown() <= 0:
 			self.setPushingDown(True)
 			self.setFace("down")
+			self.moveDown()
+			self.setStatus("walking")
 			self.setWalkCoolDown(self.returnWalkDelay())
+			self.__targety += tileWidth
+
 
 		#Checkes to see when animations and walk cycles should end
 		if keyPressed[K_a] == False and self.returnWalkCoolDown() <= 0:
 			self.setPushingLeft(False)
+			self.setLeftSpeed(0)
+			self.setStatus("idle")
 
 		if keyPressed[K_d] == False and self.returnWalkCoolDown() <= 0:
 			self.setPushingRight(False)
+			self.setRightSpeed(0)
+			self.setStatus("idle")
 
 		if keyPressed[K_w] == False and self.returnWalkCoolDown() <= 0:
 			self.setPushingUp(False)
+			self.setUpSpeed(0)
+			self.setStatus("idle")
 
 		if keyPressed[K_s] == False and self.returnWalkCoolDown() <= 0:
 			self.setPushingDown(False)
-
-		#Moves for walk cool down time
-		if self.returnWalkCoolDown() > 0:
-			self.setStatus("walking")
-
-			if self.returnFace() == "left":
-				self.moveLeft()
-
-			if self.returnFace() == "right":
-				self.moveRight()
-
-			if self.returnFace() == "up":
-				self.moveUp()
-
-			if self.returnFace() == "down":
-				self.moveDown()
-						
-		#Checks to see if walk cool down is over
-		if self.returnWalkCoolDown() <= 0:
+			self.setDownSpeed(0)
 			self.setStatus("idle")
 
-			if self.returnFace() == "left":
-				self.setLeftSpeed(0)
+	def moving(self, dir):
+		result = {
+		  "up": (self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight()),
+		  "down": (self.returnPushingUp() or self.returnPushingLeft() or self.returnPushingRight()),
+		  "left": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingRight()),
+		  "right": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft())
 
-			if self.returnFace() == "right":
-				self.setRightSpeed(0)
-
-			if self.returnFace() == "up":
-				self.setUpSpeed(0)
-
-			if self.returnFace() == "down":
-				self.setDownSpeed(0)
-
+		}[dir]
+		return result
 	#Calls all methods that manipulate character which need to constantly update
 	def updateAllPlayers(self, screen):
 		self.animation()
