@@ -1,9 +1,14 @@
 #Creates all of the sprites and returns them in seperate, neat lists
 from pygame import *
 from BasicSprite import BasicSprite
+import os
 
-MAIN_SPRITES = image.load("spriteSheet.gif")
+MAIN_SPRITES = None
 
+if os.name == 'nt':
+	MAIN_SPRITES = image.load("spriteSheet.gif")
+else:
+	MAIN_SPRITES = image.load("spriteSheet.bmp")
 def redDownIdleAnim():
 	redDownIdle = BasicSprite("Red's down Idle anim.", MAIN_SPRITES, 481, 495, 387, 406, 5, 0, 0)
 	return redDownIdle
