@@ -69,9 +69,9 @@ class BasicSprite:
 
 	def setScale(self, scale):
 		self.__scale = scale
-		self.__scaledWidth = self.__width * self.__scale
-		self.__scaledHeight = self.__height * self.__scale
-		self.__scaledPicture = transform.scale(self.__Picture, (self.__scaledWidth, self.__scaledHeight))
+		self.__scaledWidth = self.__spriteWidth * self.__scale
+		self.__scaledHeight = self.__spriteHeight * self.__scale
+		self.__scaledPicture = transform.scale(self.__spritePicture, (self.__scaledWidth, self.__scaledHeight))
 
 	def returnScale(self):
 		return self.__scale
@@ -96,6 +96,9 @@ class BasicSprite:
 
 	def returnAdjustY(self):
 		return self.__adjustY
+
+	def updateSprite(self):
+		self.setScale(self.returnScale())
 
 	def __str__(self):
 		return  "\nName: " + str(self.__name)   + \

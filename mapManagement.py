@@ -30,7 +30,7 @@ def createTown1Grass():
 
 	for i in range(30):
 		for j in range(16):
-			grassList.append(TileSprite(grassTileImage1, [], (i * 64, j * 64), grassTileImage1, \
+			grassList.append(TileSprite(grassTileImage1, [], (i, j), (i * 64, j * 64), grassTileImage1, \
 				0, None, True, "Grass", [], [], 0))
 
 	return grassList

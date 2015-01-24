@@ -1,14 +1,15 @@
 #This will handle all tiles that will be animated and added to the sreen
 
 class TileSprite:
-	def __init__(self, idleTile = None, movingTile = [], coords = (0,0), \
+	def __init__(self, idleTile = None, movingTile = [], tileCoords = (0, 0), drawCoords = (0,0), \
 				defaultTile = None, animTimer = 5, currentTile = None,\
 				isWalkableOn = False, tileType = "", pokemonObjects = [], items = [], \
 				encounterRate = 0):
 
 		self.__idleTile = idleTile
 		self.__movingTile = movingTile
-		self.__coords = coords
+		self.__tileCoords = tileCoords
+		self.__drawCoords = drawCoords
 		self.__defaultTile = defaultTile
 		self.__animTimer = animTimer
 		self.__currentTile = currentTile
@@ -31,11 +32,17 @@ class TileSprite:
 	def returnMovingTile(self):
 		return self.__movingTile
 
-	def setCoords(self, coords):
-		self.__coords = coords
+	def setTileCoords(self, tileCoords):
+		self.__tileCoords = tileCoords
 
-	def returnCoords(self):
-		return self.__coords
+	def returnTileCoords(self):
+		return self.__tileCoords
+
+	def setDrawCoords(self, drawCoords):
+		self.__coords = drawCoords
+
+	def returnDrawCoords(self):
+		return self.__drawCoords
 
 	def setDefaultTile(self, defaultTile):
 		self.__defaultTile = defaultTile
@@ -91,8 +98,8 @@ class TileSprite:
 
 	def draw(self, screen):
 		screen.blit(self.returnCurrentTile().returnScaledPicture(), \
-			(self.returnCoords()[0] + self.returnCurrentTile().returnAdjustX(),\
-			self.returnCoords()[1] + self.returnCurrentTile().returnAdjustY()))
+			(self.returnDrawCoords()[0] + self.returnCurrentTile().returnAdjustX(),\
+			self.returnDrawCoords()[1] + self.returnCurrentTile().returnAdjustY()))
 
 	def updateAll(self, screen):
 		self.animation()

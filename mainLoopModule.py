@@ -22,6 +22,13 @@ def run():
 	#Immediately maximizes the screen upon starting, calls method in windowControl module
 	windowControl.SDL_Maximize()
 
+	#for tile in tileList2:
+	#	print(tile.returnTileCoords())
+
+	for character in objectLists[0]:
+		character.returnCurrentSprite().updateSprite()
+		print(character.returnCurrentSprite().returnScaledWidth())
+
 	while keepGoing:
 		#Updates the display/objects by calling the objects' class update methods
 		
