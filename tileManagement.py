@@ -1,8 +1,8 @@
 from pygame import *
 from BasicSprite import BasicSprite
 
-MAIN_SPRITES = image.load("spriteSheet.gif")
-MAIN_TILES1 = image.load("LittleRootSheet.png")
+MAIN_SPRITES = image.load("spriteSheet.bmp")
+MAIN_TILES1 = image.load("LittleRootSheet.bmp")
 
 
 def createDirt():
