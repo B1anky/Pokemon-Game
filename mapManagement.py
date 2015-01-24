@@ -1,6 +1,7 @@
 import tileManagement
 from TileSprite import TileSprite
 from pygame import *
+from scale import *
 
 def createMaps():
 	createTown1()
@@ -28,9 +29,9 @@ def createTown1Grass():
 	grassTileImage1 = tileManagement.createGrass1()
 	grassList = []
 
-	for i in range(30):
-		for j in range(16):
-			grassList.append(TileSprite(grassTileImage1, [], (i, j), (i * 64, j * 64), grassTileImage1, \
+	for i in range(1920 // (6 * SCALE)):
+		for j in range(1080 // (6 * SCALE)):
+			grassList.append(TileSprite(grassTileImage1, [], (i, j), (i * 16 * SCALE, j * 16 * SCALE), grassTileImage1, \
 				0, None, True, "Grass", [], [], 0))
 
 	return grassList

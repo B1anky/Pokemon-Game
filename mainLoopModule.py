@@ -24,10 +24,9 @@ def run():
 
 	#for tile in tileList2:
 	#	print(tile.returnTileCoords())
-
-	for character in objectLists[0]:
-		character.returnCurrentSprite().updateSprite()
-		print(character.returnCurrentSprite().returnScaledWidth())
+	for player in objectLists[1]:
+		player.updateAllPlayers(screen)
+		print(player.checkMoving("idle"))
 
 	while keepGoing:
 		#Updates the display/objects by calling the objects' class update methods

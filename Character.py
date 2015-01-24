@@ -2,6 +2,7 @@
 #Basic Sprite class objects, but does not extend
 
 from pygame import *
+from scale import *
 import mainLoopModule
 
 #Credit for basic structure to Michael Melnik Jr. (Xvladin)
@@ -58,6 +59,9 @@ class Character:
 		#Rest of normal movement initializers
 		self.__x = x
 		self.__y = y
+		self.__targetX = x 
+		self.__targetY = y
+		self.__spacing = TILEWIDTH/SCALE/4
 
 		#Movement limiting attribute initializers
 		self.__canLeaveScreen = canLeaveScreen
@@ -252,11 +256,23 @@ class Character:
 	def returnX(self):
 		return self.__x
 
+	def setTargetX(self, targetX):
+		self.__targetX = targetX
+
+	def returnTargetX(self):
+		return self.__targetX
+
 	def setY(self, y):
 		self.__y = y
 
 	def returnY(self):
 		return self.__y
+
+	def setTargetY(self, targetY):
+		self.__targetY = targetY
+
+	def returnTargetY(self):
+		return self.__targetY
 
 	def setCanLeaveScreen(self, canLeaveScreen):
 		self.__canLeaveScreen = canLeaveScreen
@@ -354,6 +370,12 @@ class Character:
 	def returnDelta(self):
 		return self.__delta
 
+	def setSpacing(self):
+		self.__spacing = TILEWIDTH//SCALE//4 #self.returnWalkDelay()
+
+	def returnSpacing(self):
+		return self.__spacing
+
 	#Above is all initialization methods, below will be the rest of the methods
 	#Most of this is credited to Michael Melnik Jr. (Xvladin)
 	#I've privatized 100% of the methods and attributes, dx and dy aren't 
@@ -361,21 +383,26 @@ class Character:
 
 	#Basic movement methods
 	def moveRight(self):
-		if self.returnRightSpeed() < self.returnMaxSpeed():
-			self.setRightSpeed(self.returnSpeedStat() * self.returnSpeed())
+		#if self.returnRightSpeed() < self.returnMaxSpeed():
+		#	self.setRightSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setRightSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setTargetX(self.returnTargetX() + TILEWIDTH)
+		self.setStatus("walking") 
 
 	def moveLeft(self):
-		if self.returnLeftSpeed() < self.returnMaxSpeed():
-			self.setLeftSpeed(self.returnSpeedStat() * self.returnSpeed())
-
+		self.setLeftSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setTargetX(self.returnTargetX() - TILEWIDTH)
+		self.setStatus("walking") 
 
 	def moveUp(self):
-		if self.returnUpSpeed() < self.returnMaxSpeed():
-			self.setUpSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setUpSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setTargetY(self.returnTargetY() - TILEWIDTH)
+		self.setStatus("walking") 
 
 	def moveDown(self):
-		if self.returnDownSpeed() < self.returnMaxSpeed():
-			self.setDownSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setDownSpeed(self.returnSpeedStat() * self.returnSpeed())
+		self.setTargetY(self.returnTargetY() + TILEWIDTH)
+		self.setStatus("walking") 
 
 	def updateStatus(self):
 		if self.returnAllSpeeds() == 0:
@@ -439,23 +466,45 @@ class Character:
 				self.setWalkAnimCount(self.returnWalkAnimCount() + 1)
 				if self.returnWalkAnimCount() > (len(self.returnRightWalkAnimList()) - 1):
 					self.setWalkAnimCount(0)
-				self.setWalkAnimCtr(0)
+				self.setWalkAnimCtr(0)			
+
+
+		if self.returnTargetX() > self.returnX():
+			self.setX(self.returnX() + self.returnSpacing())
+		if self.returnTargetX() < self.returnX():
+			self.setX(self.returnX() - self.returnSpacing())
+		if self.returnTargetY() > self.returnY():
+			self.setY(self.returnY() + self.returnSpacing())	
+		if self.returnTargetY() < self.returnY():
+			self.setY(self.returnY() - self.returnSpacing())	
+
+	def checkMoving(self, dir):
+		result = {
+		  "up": (self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight()),
+		  "down": (self.returnPushingUp() or self.returnPushingLeft() or self.returnPushingRight()),
+		  "left": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingRight()),
+		  "right": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft()),
+		  "idle": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight())
+
+		}[dir]
+		return result
 	
 	#dx and dy are private but don't call a mutator to change since neither are object attributes
-	def updateCoords(self):
-		if self.returnWalkCoolDown() > 0:
-			self.__dx = (self.returnRightSpeed() - self.returnLeftSpeed())
-			self.__dy = (self.returnDownSpeed() - self.returnUpSpeed())
+	#def updateCoords(self):
+		#if self.returnWalkCoolDown() > 0:
+			#self.__dx = (self.returnRightSpeed() - self.returnLeftSpeed())
+			#self.__dy = (self.returnDownSpeed() - self.returnUpSpeed())
 
-			self.setAllSpeeds(self.returnRightSpeed() + self.returnLeftSpeed() + self.returnUpSpeed() + self.returnDownSpeed())
+			#self.setAllSpeeds(self.returnRightSpeed() + self.returnLeftSpeed() + self.returnUpSpeed() + self.returnDownSpeed())
 
-			self.setX(self.returnX() + self.returnDx())
-			self.setY(self.returnY() + self.returnDy())
+			#self.setX(self.returnX() + self.returnDx())
+			#self.setY(self.returnY() + self.returnDy())
 
 	def updateTileClock(self):
 		#This is for changing from pixel based to time based movement for tiles
 		self.setDelta(self.returnTileClock().tick()/100.0)		
 		self.setWalkCoolDown(self.returnWalkCoolDown() - self.returnDelta())
+
 
 	#Drawing method
 	def draw(self, screen):
@@ -466,7 +515,7 @@ class Character:
 	def updateAll(self, screen):
 		self.updateTileClock()
 		self.animation()
-		self.updateStatus()
+		#self.updateStatus()
 		self.updateCoords()
 		self.draw(screen)
 

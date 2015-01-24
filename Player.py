@@ -1,6 +1,7 @@
 #The class for what the player controls, extends Character
 from Character import Character
 from pygame import *
+from scale import *
 import windowControl
 import sys
 import mainLoopModule
@@ -40,8 +41,6 @@ class Player(Character):
 		self.__pushingLeft = pushingLeft
 		self.__pushingUp = pushingUp
 		self.__pushingDown = pushingDown
-		self.__targetx = x
-		self.__targety = y
 
 	def setNumber(self, number):
 		self.__number = number
@@ -79,7 +78,6 @@ class Player(Character):
 		self.setPushingUp(boo)
 		self.setPushingDown(boo)
 
-	
 	#Below is what allows the user to interact with the sprite and window
 	def playerControl(self, screen):
 		event.pump()
@@ -106,99 +104,64 @@ class Player(Character):
 				elif Event.type == VIDEORESIZE:
 					size = Event.size
 					mainLoopModule.screen = display.set_mode(size, windowControl.video_flags)
-		
-		self.returnCurrentSprite().updateSprite()
-		scale = self.returnCurrentSprite().returnScale()
-		tileWidth = scale * 16			
 
-		s2 = 1
-
-		if self.__targetx > self.returnX():
-			self.setX(self.returnX() + self.returnWalkDelay() * scale * s2)
-		if self.__targetx < self.returnX():
-			self.setX(self.returnX() - self.returnWalkDelay() * scale * s2)
-		if self.__targety > self.returnY():
-			self.setY(self.returnY() + self.returnWalkDelay() * scale * s2)	
-		if self.__targety < self.returnY():
-			self.setY(self.returnY() - self.returnWalkDelay() * scale * s2)	
-
-		if self.__targetx == self.returnX and self.__targety == self.returnY:
+		if self.returnTargetX() == self.returnX() and self.returnTargetY() == self.returnY():
 			self.setAllPush(False) 
 
-
 		#A key is pressed
-		if keyPressed[K_a] and not self.moving("left") and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_a] and not self.checkMoving("left"):
 			self.setPushingLeft(True)
 			self.setFace("left")
 			self.moveLeft()
 			self.setStatus("walking")
-			self.setWalkCoolDown(self.returnWalkDelay())
-			self.__targetx -= tileWidth
 
 		#D key is pressed
-		if keyPressed[K_d] and not self.moving("right") and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_d]: #and not self.checkMoving("right"):
 			self.setPushingRight(True)
 			self.setFace("right")
 			self.moveRight()
 			self.setStatus("walking")
-			self.setWalkCoolDown(self.returnWalkDelay())
-			self.__targetx += tileWidth
 
 		#W key is pressed
-		if keyPressed[K_w] and not self.moving("up") and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_w] and not self.checkMoving("up"):
 			self.setPushingUp(True)
 			self.setFace("up")
 			self.moveUp()
 			self.setStatus("walking")
-			self.setWalkCoolDown(self.returnWalkDelay())
-			self.__targety -= tileWidth
-
+			
 		#S key is pressed
-		if keyPressed[K_s] and not self.moving("down") and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_s] and not self.checkMoving("down"):
 			self.setPushingDown(True)
 			self.setFace("down")
 			self.moveDown()
 			self.setStatus("walking")
-			self.setWalkCoolDown(self.returnWalkDelay())
-			self.__targety += tileWidth
 
-
-		#Checkes to see when animations and walk cycles should end
-		if keyPressed[K_a] == False and self.returnWalkCoolDown() <= 0:
+		#Checks to see when animations and walk cycles should end
+		if keyPressed[K_a] == False:
 			self.setPushingLeft(False)
 			self.setLeftSpeed(0)
-			self.setStatus("idle")
 
-		if keyPressed[K_d] == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_d] == False:
 			self.setPushingRight(False)
 			self.setRightSpeed(0)
-			self.setStatus("idle")
 
-		if keyPressed[K_w] == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_w] == False:
 			self.setPushingUp(False)
 			self.setUpSpeed(0)
-			self.setStatus("idle")
 
-		if keyPressed[K_s] == False and self.returnWalkCoolDown() <= 0:
+		if keyPressed[K_s] == False:
 			self.setPushingDown(False)
 			self.setDownSpeed(0)
+
+		if not self.checkMoving("idle"):
 			self.setStatus("idle")
 
-	def moving(self, dir):
-		result = {
-		  "up": (self.returnPushingDown() or self.returnPushingLeft() or self.returnPushingRight()),
-		  "down": (self.returnPushingUp() or self.returnPushingLeft() or self.returnPushingRight()),
-		  "left": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingRight()),
-		  "right": (self.returnPushingUp() or self.returnPushingDown() or self.returnPushingLeft())
-
-		}[dir]
-		return result
 	#Calls all methods that manipulate character which need to constantly update
 	def updateAllPlayers(self, screen):
 		self.animation()
 		self.updateTileClock()
-		self.updateStatus()
-		self.updateCoords()
+		#self.updateStatus()
+		#self.updateCoords()
 		self.playerControl(screen)
 		self.draw(screen)
 
