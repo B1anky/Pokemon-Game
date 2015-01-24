@@ -1,8 +1,16 @@
 from pygame import *
 from BasicSprite import BasicSprite
+import os
 
-MAIN_SPRITES = image.load("spriteSheet.bmp")
-MAIN_TILES1 = image.load("LittleRootSheet.bmp")
+MAIN_SPRITES = None
+MAIN_SPRITES1 = None
+
+if os.name == 'nt':
+	MAIN_SPRITES = image.load("spriteSheet.gif")
+	MAIN_TILES1 = image.load("LittleRootSheet.png")
+else:
+	MAIN_SPRITES = image.load("spriteSheet.bmp")
+	MAIN_TILES1 = image.load("LittleRootSheet.bmp")
 
 
 def createDirt():
