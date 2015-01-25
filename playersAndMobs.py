@@ -30,7 +30,7 @@ def createRed():
 
 	character1 = Character.Character(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
-		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "left", redWidest, \
+		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "right", redWidest, \
 		redTallest, mapManagement.createTown1Grass()[0].returnDrawCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1], \
 		False, False, False, False, False, \
 		False, "walking", "ground", "Red", redLeftIdle, 0, 3, clock, clock.tick()/100.0, \

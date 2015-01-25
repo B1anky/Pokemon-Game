@@ -22,43 +22,38 @@ def run():
 	#Immediately maximizes the screen upon starting, calls method in windowControl module
 	windowControl.SDL_Maximize()
 
-	dirtytiles = []
+	#Initializes the lists for blitting optimizations
+	dirtyTilesList = []
+	coordsList = []
 
-	templ = [None] * (size[1]//TILEWIDTH)
-	tiles = [templ] * (size[0]//TILEWIDTH)
-	count = 0
-
-
+	#Initial blit of every grass tile 
+	for tile in tileList2:
+		if tile != None:
+			tile.updateAll(screen)
 
 	while keepGoing: 
+
 		#Updates the display/objects by calling the objects' class update methods
-		for tile in tileList2:
-			templ.append(tile)
-			if tile != None:
-				tile.updateAll(screen)
-			if count >= (size[1]//TILEWIDTH):
-				tiles.append(templ)
-				templ = []
 
-		#Draw/updates the tiles to the screen
-		for tile in dirtytiles:
-			if tile != None:
-				tile.updateAll(screen)
-
-		#print(len(dirtytiles))
-		dirtytiles = []
-
-		#Draw/updates grass tile
+		#Dirty tile optimizations, only updates necessary surrounding tile coords
+		#Helps CPU when scale is very low
+		for dirtySurroundingTiles in dirtyTilesList:
+			for dirtyCoords in dirtySurroundingTiles:
+				for tiles in tileList2:
+					if tiles.returnTileCoords() == dirtyCoords:
+						tiles.updateAll(screen)
+						coordsList = []
+						dirtyTilesList = []
 
 		#Draws/updates characters
-		for character in objectLists[0]:
-			character.updateAll(screen)
-			dirtytiles.extend(character.getDirty(tiles, size[0]//TILEWIDTH, len(tiles)))
+		#for character in objectLists[0]:
+		#	character.updateAll(screen)
+		#	dirtyTilesList.append(character.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
 		
 		#Draws/updates players
 		for player in objectLists[1]:
 			player.updateAllPlayers(screen)
-			dirtytiles.extend(player.getDirty(tiles, size[0]//TILEWIDTH, len(tiles)))
+			dirtyTilesList.append(player.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
 
 		time.Clock().tick(FPS)
 

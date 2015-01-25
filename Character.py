@@ -417,55 +417,61 @@ class Character:
 			(self.returnX() + self.returnCurrentSprite().returnAdjustX(),\
 			self.returnY() + self.returnCurrentSprite().returnAdjustY()))
 
-		font = Font(None, 36)
-		text = font.render("", 1, (10, 10, 10))
-		textpos = text.get_rect()
-		textpos.centerx = self.__x
-		textpos.centery = self.__y
-		screen.blit(text, textpos)
-
-
 	def updateAll(self, screen):
 		self.updateTileClock()
 		self.animation()
 		self.draw(screen)
 
-	def getDirty(self, tiles, tWidth, tHeight):
+	def getDirty(self, coordsList, amtOfTilesInWidth, amtofTilesInHeight):
 		dirt = []
-		l = self.getBorderTileList(tWidth,tHeight)
-		for coord in l:
+		borderingCoordsList = self.getBorderTileList(coordsList, amtOfTilesInWidth, amtofTilesInHeight)
+		for coords in borderingCoordsList:
 			try:
-				dirt.append(tiles[coord[0]][coord[1]])
+				dirt.append(coords)
 			except:
 				pass
+
 		return dirt
 
-	def getBorderTileList(self, tWidth, tHeight):
-		lists = []
-		i = self.returnTileCoords()[0]
-		j = self.returnTileCoords()[1]
+	def getBorderTileList(self, coordsList, amtOfXTiles, amtOfYTiles):
+		i = self.returnTileCoords()[0] #width
+		j = self.returnTileCoords()[1] #height
 
-		if i < tWidth and j < tHeight:
-			lists.append((i,j))
-		if i < tWidth and j+1 < tHeight:
-			lists.append((i,j+1))
-		if i+1 < tWidth and j < tHeight:
-			lists.append((i+1,j))
-		if i < tWidth and j-1 > 0:
-			lists.append((i,j-1))
-		if i-1 > 0 and j < tHeight:
-			lists.append((i-1,j))
-		if i+1 < tWidth and j+1 < tHeight:
-			lists.append((i+1,j+1))
-		if i-1 > 0 and j-1 > 0:
-			lists.append((i-1,j-1))
-		if i-1 > 0 and j+1 < tHeight:
-			lists.append((i-1,j+1))
-		if i+1 < tWidth and j-1 > 0:
-			lists.append((i+1,j-1))
+		#Current object tile
+		if i <= amtOfXTiles and j <= amtOfYTiles:
+			coordsList.append((i,j))
+
+		#Down 1 tile
+		if i <= amtOfXTiles and j+1 <= amtOfYTiles:
+			coordsList.append((i,j+1))
+
+		#Down 2 tile
+		if i <= amtOfXTiles and j+2 <= amtOfYTiles:
+			coordsList.append((i,j+2))
+
+		if i+1 <= amtOfXTiles and j <= amtOfYTiles:
+			coordsList.append((i+1,j))
+
+		if i <= amtOfXTiles and j-1 >= 0:
+			coordsList.append((i,j-1))
+
+		if i-1 >= 0 and j <= amtOfYTiles:
+			coordsList.append((i-1,j))
+
+		#Down 1, right 1, tile
+		if i+1 <= amtOfXTiles and j+1 <= amtOfYTiles:
+			coordsList.append((i+1,j+1))
+
+		if i-1 >= 0 and j-1 >= 0:
+			coordsList.append((i-1,j-1))
+
+		if i-1 >= 0 and j+1 <= amtOfYTiles:
+			coordsList.append((i-1,j+1))
+
+		if i+1 <= amtOfXTiles and j-1 >= 0:
+			coordsList.append((i+1,j-1))
 		
-		#print(lists)
-		return lists
+		return coordsList
 
 	def __str__(self):
 		return  "\nName: " + str(self.__name)   + \
