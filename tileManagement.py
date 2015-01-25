@@ -16,9 +16,9 @@ else:
 
 
 def createDirt():
-	dirt = BasicSprite("Dirt tile", MAIN_SPRITES, 1639, 1686, 0, 30, SCALE, 0, 0)
+	dirt = BasicSprite("Dirt tile", MAIN_SPRITES, 1639, 1686, 0, 30, SCALE)
 	return dirt
 
 def createGrass1():
-	grass1 = BasicSprite("Grass tile 1", MAIN_TILES1, 177, 193, 298, 314, SCALE, 0, 0)
+	grass1 = BasicSprite("Grass tile 1", MAIN_TILES1, 177, 193, 298, 314, SCALE)
 	return grass1

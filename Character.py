@@ -389,10 +389,13 @@ class Character:
 
 		if self.returnTargetX() > self.returnX():
 			self.setX(self.returnX() + self.returnSpacing())
+
 		if self.returnTargetX() < self.returnX():
 			self.setX(self.returnX() - self.returnSpacing())
+
 		if self.returnTargetY() > self.returnY():
-			self.setY(self.returnY() + self.returnSpacing())	
+			self.setY(self.returnY() + self.returnSpacing())
+				
 		if self.returnTargetY() < self.returnY():
 			self.setY(self.returnY() - self.returnSpacing())	
 
@@ -414,8 +417,7 @@ class Character:
 	#Drawing method
 	def draw(self, screen):
 		screen.blit(self.returnCurrentSprite().returnScaledPicture(), \
-			(self.returnX() + self.returnCurrentSprite().returnAdjustX(),\
-			self.returnY() + self.returnCurrentSprite().returnAdjustY()))
+			(self.returnX(), self.returnY()))
 
 	def updateAll(self, screen):
 		self.updateTileClock()
@@ -445,7 +447,7 @@ class Character:
 		if i <= amtOfXTiles and j+1 <= amtOfYTiles:
 			coordsList.append((i,j+1))
 
-		#Down 2 tile
+		#Down 2 tiles, needed for animation for walking up/down
 		if i <= amtOfXTiles and j+2 <= amtOfYTiles:
 			coordsList.append((i,j+2))
 

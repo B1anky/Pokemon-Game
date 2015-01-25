@@ -4,6 +4,7 @@ import Player
 import spriteManagement
 from pygame import *
 import mapManagement
+from scale import *
 
 def createPlayers():
 	createRed()
@@ -28,22 +29,21 @@ def createRed():
 
 	clock = time.Clock()
 
+	#x and y draw coords must be TILEWIDTH * coords
+
 	character1 = Character.Character(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
 		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "right", redWidest, \
-		redTallest, mapManagement.createTown1Grass()[0].returnDrawCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1], \
-		False, False, False, False, False, \
-		False, "walking", "ground", "Red", redLeftIdle, 0, 3, clock, clock.tick()/100.0, \
-		(mapManagement.createTown1Grass()[0].returnTileCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1]))
+		redTallest, TILEWIDTH * 3, TILEWIDTH * 5, False, False, False, False, False, \
+		False, "idle", "ground", "Red", redLeftIdle, 0, 3, clock, clock.tick()/100.0, \
+		(3, 5))
 
 	player1 = Player.Player(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
 		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "right", redWidest, \
-		redTallest, mapManagement.createTown1Grass()[0].returnDrawCoords()[0], mapManagement.createTown1Grass()[0].returnDrawCoords()[1],\
-		False, False, False, False, False, \
+		redTallest, TILEWIDTH * 0, TILEWIDTH * 0, False, False, False, False, False, \
 		False, "idle", "ground", "Red", redRightIdle, 0, 3, clock, clock.tick()/100.0,\
-		(mapManagement.createTown1Grass()[0].returnTileCoords()[0], mapManagement.createTown1Grass()[0].returnTileCoords()[1]), \
-		False, False, False, False, False)
+		(0,0), False, False, False, False, False)
 
 	characterList = []
 	playerList = []

@@ -3,7 +3,7 @@ from pygame import *
 #The most basic sprite class for basic attributes that all sprites have in common
 class BasicSprite:
 	def __init__(self, name, spriteSheet, spriteLeft, spriteRight, spriteTop, spriteBottom,\
-				 scale, adjustX, adjustY):
+				 scale):
 		self.__name = name
 		self.__spriteSheet = spriteSheet
 		self.__spriteLeft = spriteLeft
@@ -18,8 +18,6 @@ class BasicSprite:
 		self.__scaledSpriteWidth = self.__spriteWidth * self.__scale
 		self.__scaledSpriteHeight = self.__spriteHeight * self.__scale
 		self.__scaledPicture = transform.scale(self.__spritePicture, (self.__scaledSpriteWidth, self.__scaledSpriteHeight))
-		self.__adjustX = adjustX
-		self.__adjustY = adjustY
 
 	def setName(self, name):
 		self.__name = name
@@ -85,18 +83,6 @@ class BasicSprite:
 	def returnScaledPicture(self):
 		return self.__scaledPicture
 
-	def setAdjustX(self, adjustX):
-		self.__adjustX = adjustX
-
-	def returnAdjustX(self):
-		return self.__adjustX
-
-	def setAdjustY(self, adjustY):
-		self.__adjustY = adjustY
-
-	def returnAdjustY(self):
-		return self.__adjustY
-
 	def updateSprite(self):
 		self.setScale(self.returnScale())
 
@@ -106,6 +92,4 @@ class BasicSprite:
 				"\nLeft Coord: " + str(self.__spriteLeft) + \
 				"\nRight Coord: " + str(self.__spriteRight) + \
 				"\nTop Coord: " + str(self.__spriteTop) + \
-				"\nBottom Coord: " + str(self.__spriteBottom) + \
-				"\nHorizontal Adjustment: " + str(self.__adjustX) + \
-				"\nVertical Adjustment: " + str(self.__adjustY)
+				"\nBottom Coord: " + str(self.__spriteBottom)

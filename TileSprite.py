@@ -98,8 +98,7 @@ class TileSprite:
 
 	def draw(self, screen):
 		screen.blit(self.returnCurrentTile().returnScaledPicture(), \
-			(self.returnDrawCoords()[0] + self.returnCurrentTile().returnAdjustX(),\
-			self.returnDrawCoords()[1] + self.returnCurrentTile().returnAdjustY()))
+			(self.returnDrawCoords()[0], self.returnDrawCoords()[1]))
 
 	def updateAll(self, screen):
 		self.animation()

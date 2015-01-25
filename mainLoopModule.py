@@ -23,7 +23,7 @@ def run():
 	windowControl.SDL_Maximize()
 
 	#Initializes the lists for blitting optimizations
-	dirtyTilesList = []
+	allDirtyTilesList = []
 	coordsList = []
 
 	#Initial blit of every grass tile 
@@ -37,23 +37,23 @@ def run():
 
 		#Dirty tile optimizations, only updates necessary surrounding tile coords
 		#Helps CPU when scale is very low
-		for dirtySurroundingTiles in dirtyTilesList:
-			for dirtyCoords in dirtySurroundingTiles:
+		for dirtyObjectTilesList in allDirtyTilesList:
+			for dirtyTupleCoords in dirtyObjectTilesList:
 				for tiles in tileList2:
-					if tiles.returnTileCoords() == dirtyCoords:
+					if tiles.returnTileCoords() == dirtyTupleCoords:
 						tiles.updateAll(screen)
 						coordsList = []
-						dirtyTilesList = []
+						allDirtyTilesList = []
 
 		#Draws/updates characters
-		#for character in objectLists[0]:
-		#	character.updateAll(screen)
-		#	dirtyTilesList.append(character.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
+		for character in objectLists[0]:
+			character.updateAll(screen)
+			allDirtyTilesList.append(character.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
 		
 		#Draws/updates players
 		for player in objectLists[1]:
 			player.updateAllPlayers(screen)
-			dirtyTilesList.append(player.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
+			allDirtyTilesList.append(player.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
 
 		time.Clock().tick(FPS)
 
