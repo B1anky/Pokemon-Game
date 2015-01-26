@@ -10,7 +10,6 @@ def run():
 	init()
 	keepGoing = True
 	video_flags = RESIZABLE
-	size = (1920, 1080)
 	screen = display.set_mode(size, video_flags)
 
 	#Creates the player object
@@ -26,10 +25,25 @@ def run():
 	allDirtyTilesList = []
 	coordsList = []
 
-	#Initial blit of every grass tile 
+	templ = [tileList2[0]] * (size[1]//TILEWIDTH)
+	masterTileList = [templ] * (size[0]//TILEWIDTH)
+
+	tx = 0
+	ty = 0
+
+	#Initial blit of every grass tile 	
 	for tile in tileList2:
-		if tile != None:
-			tile.updateAll(screen)
+		if tile == None:
+			continue
+		if tx >= (size[1]//TILEWIDTH):
+			ty += 1
+			tx = 0
+		try:
+			masterTileList[tx][ty] = tile
+		except:
+			pass
+		tile.updateAll(screen)
+		tx += 1
 
 	while keepGoing: 
 
@@ -39,11 +53,23 @@ def run():
 		#Helps CPU when scale is very low
 		for dirtyObjectTilesList in allDirtyTilesList:
 			for dirtyTupleCoords in dirtyObjectTilesList:
+				'''
+				DTCx = dirtyTupleCoords[0]
+				DTCy = dirtyTupleCoords[1]
+				tile = masterTileList[DTCx][DTCy]
+				if tile == None:
+					continue
+				tile.updateAll(screen)
+				coordsList = []
+				allDirtyTilesList = []
+
+				'''
 				for tiles in tileList2:
 					if tiles.returnTileCoords() == dirtyTupleCoords:
 						tiles.updateAll(screen)
 						coordsList = []
 						allDirtyTilesList = []
+				
 
 		#Draws/updates characters
 		for character in objectLists[0]:
@@ -52,9 +78,9 @@ def run():
 		
 		#Draws/updates players
 		for player in objectLists[1]:
-			player.updateAllPlayers(screen)
 			allDirtyTilesList.append(player.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
-
+			player.updateAllPlayers(screen, masterTileList)
+			
 		time.Clock().tick(FPS)
 
 		display.flip()  

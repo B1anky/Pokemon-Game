@@ -41,9 +41,9 @@ def createRed():
 	player1 = Player.Player(redDownIdle, redLeftIdle, redUpIdle, \
 		redRightIdle, redDownWalkList, redLeftWalkList, redUpWalkList, \
 		redRightWalkList, redDefault, 10, 0, 0, 0, 0, "right", redWidest, \
-		redTallest, TILEWIDTH * 0, TILEWIDTH * 0, False, False, False, False, False, \
+		redTallest, TILEWIDTH * 5, TILEWIDTH * 5, False, False, False, False, False, \
 		False, "idle", "ground", "Red", redRightIdle, 0, 3, clock, clock.tick()/100.0,\
-		(0,0), False, False, False, False, False)
+		(5,5), False, False, False, False, False, 0, 0, [0][0])
 
 	characterList = []
 	playerList = []

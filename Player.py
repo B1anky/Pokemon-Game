@@ -20,7 +20,8 @@ class Player(Character):
 				isOffScreen = False, status = "idle", isOn = "nothing", name = None, \
 				currentSprite = None, walkCoolDown = 0, walkDelay = 5,  \
 				tileClock = None, delta = 0, tileCoords = (0,0), number = 0, pushingRight = False, \
-				pushingLeft = False, pushingUp = False, pushingDown = False, isPushing = False):
+				pushingLeft = False, pushingUp = False, pushingDown = False, isPushing = False, \
+				cameraX = 0, cameraY = 0, mapData = [0][0]):
 
 		Character.__init__(self, downIdleAnim, leftIdleAnim, upIdleAnim, \
 							rightIdleAnim,  downWalkAnimList, \
@@ -39,6 +40,10 @@ class Player(Character):
 		self.__pushingLeft = pushingLeft
 		self.__pushingUp = pushingUp
 		self.__pushingDown = pushingDown
+		self.__cameraX = cameraX
+		self.__cameraY = cameraY
+		self.__mapData = mapData
+		self.__count = 0
 
 	def setNumber(self, number):
 		self.__number = number
@@ -70,6 +75,18 @@ class Player(Character):
 	def returnPushingDown(self):
 		return self.__pushingDown
 
+	def setCameraX(self, cameraX):
+		self.__cameraX = cameraX
+
+	def returnCameraX(self):
+		return self.__cameraX
+
+	def setCameraY(self, cameraY):
+		self.__cameraY = cameraY
+
+	def returnCameraY(self):
+		return self.__cameraY
+
 	def setAllPush(self, boo):
 		self.setPushingLeft(boo)
 		self.setPushingRight(boo)
@@ -77,7 +94,7 @@ class Player(Character):
 		self.setPushingDown(boo)
 
 	#Below is what allows the user to interact with the sprite and window
-	def playerControl(self, screen):
+	def playerControl(self, screen, nonOccludedtilesList):
 		event.pump()
 		keyPressed = key.get_pressed()
 		for Event in event.get():
@@ -115,7 +132,6 @@ class Player(Character):
 				self.setPushingLeft(True)
 				self.setFace("left")
 				self.moveLeft()
-				
 
 			#D key is pressed
 			if keyPressed[K_d] and not self.checkMoving("right"):
@@ -137,13 +153,71 @@ class Player(Character):
 				self.setFace("down")
 				self.moveDown()
 				self.setStatus("walking")
+	
+	def UpdateMapAccordingToMvt(self, screen, nonOccludedtilesList):
+		#check if player has reached bounds of screen view
+
+		#If off left
+		if self.returnTileCoords()[0] < 0:
+			self.setIsOffLeft(True)
+			
+		#If off right
+		if self.returnTileCoords()[0] > self.__count:#(size[0]//TILEWIDTH):
+			self.setIsOffRight(True)
+
+		#If off top
+		if self.returnTileCoords()[1] < 0:
+			self.setIsOffTop(True)
+
+		#If off bottom
+		if self.returnTileCoords()[1] > size[1]//TILEWIDTH:
+			self.setIsOffBottom(True)
+
+			#if they have, shift all tiles in the opposite direction of the movement
+
+		
+		for tileList in nonOccludedtilesList:
+			if tileList != None:
+				for tile in tileList:
+					if(tile != None):
+						#if (self.checkTileOnScreen(tile.returnDrawCoords()[0], tile.returnDrawCoords()[1])):
+						if self.returnIsOffLeft():
+							tile.setDrawCoords((tile.returnDrawCoords()[0] + TILEWIDTH, tile.returnDrawCoords()[1]))
+							tile.updateAll(screen)
+							self.setIsOffLeft(False)
+
+						elif self.returnIsOffRight():
+							tile.setTileCoords((tile.returnTileCoords()[0] + 1, tile.returnTileCoords()[1]))
+							#tile.setDrawCoords((tile.returnDrawCoords()[0] - TILEWIDTH, tile.returnDrawCoords()[1]))
+							tile.updateAll(screen)
+							self.__count+=1
+							self.setIsOffRight(False)
+
+						elif self.returnIsOffTop():
+							#print(tile.returnDrawCoords())
+							tile.setDrawCoords((80, 240))
+							tile.updateAll(screen)
+							#print(tile.returnDrawCoords())
+							self.setIsOffTop(False)
+
+						elif self.returnIsOffBottom():
+							tile.setDrawCoords((tile.returnDrawCoords()[0], tile.returnDrawCoords()[1] - TILEWIDTH))
+							tile.updateAll(screen)
+							self.setIsOffBottom(False)
+
+	def checkTileOnScreen(self, tilePosX, tilePosY):
+		return (tilePosX < TILEWIDTH//TILEWIDTH or tilePosX > 1920//TILEWIDTH \
+			or tilePosY < 1920//TILEWIDTH \
+			or tilePosY > 1080//TILEWIDTH)
 
 	#Calls all methods that manipulate character which need to constantly update
-	def updateAllPlayers(self, screen):
+	def updateAllPlayers(self, screen, nonOccludedtilesList):
 		self.animation()
 		self.updateTileClock()
-		self.playerControl(screen)
+		self.playerControl(screen, nonOccludedtilesList)
+		self.UpdateMapAccordingToMvt(screen, nonOccludedtilesList)
 		self.draw(screen)
+		
 
 	def __str__(self):
 		return  Character.__str__(self) + \

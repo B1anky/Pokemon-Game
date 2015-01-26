@@ -29,8 +29,11 @@ def createTown1Grass():
 	grassTileImage1 = tileManagement.createGrass1()
 	grassList = []
 
-	for i in range(1920 // TILEWIDTH):
-		for j in range(1080 // TILEWIDTH):
+	#or i in range(1920 // TILEWIDTH):
+	#	for j in range(1080 // TILEWIDTH):
+
+	for i in range(10):
+		for j in range(10):
 			grassList.append(TileSprite(grassTileImage1, [], (i, j), (i * TILEWIDTH, j * TILEWIDTH), grassTileImage1, \
 				0, None, True, "Grass", [], [], 0))
 

@@ -75,10 +75,10 @@ class BasicSprite:
 		return self.__scale
 
 	def returnScaledWidth(self):
-		return self.__scaledWidth
+		return self.__scaledSpriteWidth
 
 	def returnScaledHeight(self):
-		return self.__scaledHeight
+		return self.__scaledSpriteHeight
 
 	def returnScaledPicture(self):
 		return self.__scaledPicture

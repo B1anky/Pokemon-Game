@@ -39,7 +39,7 @@ class TileSprite:
 		return self.__tileCoords
 
 	def setDrawCoords(self, drawCoords):
-		self.__coords = drawCoords
+		self.__drawCoords = drawCoords
 
 	def returnDrawCoords(self):
 		return self.__drawCoords
@@ -98,7 +98,7 @@ class TileSprite:
 
 	def draw(self, screen):
 		screen.blit(self.returnCurrentTile().returnScaledPicture(), \
-			(self.returnDrawCoords()[0], self.returnDrawCoords()[1]))
+			(self.returnTileCoords()[0] * 5*16, self.returnTileCoords()[1] * 5*16))
 
 	def updateAll(self, screen):
 		self.animation()

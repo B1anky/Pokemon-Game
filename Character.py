@@ -395,7 +395,7 @@ class Character:
 
 		if self.returnTargetY() > self.returnY():
 			self.setY(self.returnY() + self.returnSpacing())
-				
+
 		if self.returnTargetY() < self.returnY():
 			self.setY(self.returnY() - self.returnSpacing())	
 
