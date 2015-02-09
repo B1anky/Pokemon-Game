@@ -1,4 +1,6 @@
 #This will handle all tiles that will be animated and added to the sreen
+from scale import *
+from pygame import Rect
 
 class TileSprite:
 	def __init__(self, idleTile = None, movingTile = [], tileCoords = (0, 0), drawCoords = (0,0), \
@@ -98,16 +100,15 @@ class TileSprite:
 
 	def draw(self, screen, cam):
 		imgToDraw = self.returnCurrentTile().returnScaledPicture()
-		fx = self.returnTileCoords()[0] * 5*16
-		fy = self.returnTileCoords()[1] * 5*16
+		fx = self.returnTileCoords()[0] * TILEWIDTH
+		fy = self.returnTileCoords()[1] * TILEWIDTH
 
-		from pygame import Rect
-		screen.blit(imgToDraw, cam.apply(Rect(fx, fy, 5*16, 5*16) ) )
+		screen.blit(imgToDraw, cam.apply(Rect(fx, fy, TILEWIDTH, TILEWIDTH)))
 	
 	def rect(self):
-		fx = self.returnTileCoords()[0] * 5*16
-		fy = self.returnTileCoords()[1] * 5*16
-		return Rect(fx, fy, 5*16, 5*16) 
+		fx = self.returnTileCoords()[0] * TILEWIDTH
+		fy = self.returnTileCoords()[1] * TILEWIDTH
+		return Rect(fx, fy, TILEWIDTH, TILEWIDTH) 
 		
 	def updateAll(self, screen, cam):
 		self.animation()

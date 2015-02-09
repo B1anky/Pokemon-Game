@@ -2,7 +2,6 @@
 #Basic Sprite class objects, but does not extend
 
 from pygame import *
-from pygame.font import *
 from scale import *
 
 #Credit for basic structure to Michael Melnik Jr. (Xvladin)
@@ -441,8 +440,7 @@ class Character:
 		fx = self.returnX()
 		fy = self.returnY()
 
-		from pygame import Rect
-		screen.blit(imgToDraw, cam.apply(Rect(fx + SCALE*16, fy + SCALE*176, SCALE*16, SCALE*16) ) )
+		screen.blit(imgToDraw, cam.apply(Rect(fx + TILEWIDTH, fy + TILEWIDTH, TILEWIDTH, TILEWIDTH)))
 
 	def updateAll(self, screen, cam):
 		#self.updateTileClock()

@@ -18,7 +18,8 @@ def createTown1Dirt():
 
 	dirtList.append(TileSprite(dirtImage, [], (15 ,15), ((15 * TILEWIDTH),(15 * TILEWIDTH)),\
 				dirtImage, 0, None, True, "Dirt", [], [], 0))
-
+	dirtList.append(TileSprite(dirtImage, [], (18 ,15), ((18 * TILEWIDTH),(15 * TILEWIDTH)),\
+				dirtImage, 0, None, True, "Dirt", [], [], 0))
 	return dirtList
 
 def createTown1Grass():
@@ -46,11 +47,11 @@ def createTown1Trees():
 		for y in range(0, 10, 2):
 				treeList.append(TileSprite(treeTileImage1[0], [], (x, y), (x * TILEWIDTH, y * TILEWIDTH), treeTileImage1[0], \
 					0, None, False, "Tree", [], [], 0))
-				treeList.append(TileSprite(treeTileImage1[1], [], (x + 1, y), ((x + 1) * TILEWIDTH, y * TILEWIDTH), treeTileImage1[1], \
+				treeList.append(TileSprite(treeTileImage1[1], [], (x + 1, y), (x  * TILEWIDTH, y * TILEWIDTH), treeTileImage1[1], \
 					0, None, False, "Tree", [], [], 0))
-				treeList.append(TileSprite(treeTileImage1[2], [], (x, y + 1), (x * TILEWIDTH, (y + 1) * TILEWIDTH), treeTileImage1[2], \
+				treeList.append(TileSprite(treeTileImage1[2], [], (x, y + 1), (x * TILEWIDTH, y  * TILEWIDTH), treeTileImage1[2], \
 					0, None, False, "Tree", [], [], 0))
-				treeList.append(TileSprite(treeTileImage1[3], [], (x + 1, y + 1), ((x + 1) * TILEWIDTH, (y + 1) * TILEWIDTH), treeTileImage1[3], \
+				treeList.append(TileSprite(treeTileImage1[3], [], (x + 1, y + 1), (x  * TILEWIDTH, y  * TILEWIDTH), treeTileImage1[3], \
 					0, None, False, "Tree", [], [], 0))
 
 	for tree in treeList:
