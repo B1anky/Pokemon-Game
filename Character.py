@@ -4,7 +4,6 @@
 from pygame import *
 from pygame.font import *
 from scale import *
-import mainLoopModule
 
 #Credit for basic structure to Michael Melnik Jr. (Xvladin)
 class Character:
@@ -51,7 +50,7 @@ class Character:
 		self.__y = y
 		self.__targetX = x 
 		self.__targetY = y
-		self.__spacing = TILEWIDTH/SCALE/4
+		self.__spacing = 4*TILEWIDTH/SCALE/4
 		self.__tileCoords = tileCoords
 
 		#Movement limiting attribute initializers
@@ -305,29 +304,49 @@ class Character:
 	#object atributes, therefore don't receive a separate mutator
 
 	#Basic movement methods
-	def moveRight(self):
-		self.setTargetX(self.returnTargetX() + TILEWIDTH)
+	def moveRight(self, allTiles):
 		self.setStatus("walking")
-		self.setTileCoords((self.returnTileCoords()[0] + 1, self.returnTileCoords()[1]))
-		#print(self.returnTileCoords())
+		self.setFace("right")
+		stopWalking = False
+		for i in allTiles[2]:
+			if i.returnTileCoords()[0] - (self.returnTileCoords()[0] + 1) == 0 and i.returnTileCoords()[1] - (self.returnTileCoords()[1]) == 0 and i.returnIsWalkableOn() == False:
+				stopWalking = True
+		if not stopWalking:
+			self.setTargetX(self.returnTargetX() + TILEWIDTH)
+			self.setTileCoords((self.returnTileCoords()[0] + 1, self.returnTileCoords()[1]))
 
-	def moveLeft(self):
-		self.setTargetX(self.returnTargetX() - TILEWIDTH)
+	def moveLeft(self, allTiles):
 		self.setStatus("walking")
-		self.setTileCoords((self.returnTileCoords()[0] - 1, self.returnTileCoords()[1]))
-		#print(self.returnTileCoords())
+		self.setFace("left")
+		stopWalking = False
+		for i in allTiles[2]:
+			if i.returnTileCoords()[0] - (self.returnTileCoords()[0] - 1) == 0 and i.returnTileCoords()[1] - (self.returnTileCoords()[1]) == 0 and i.returnIsWalkableOn() == False:
+				stopWalking = True
+		if not stopWalking:
+			self.setTargetX(self.returnTargetX() - TILEWIDTH)
+			self.setTileCoords((self.returnTileCoords()[0] - 1, self.returnTileCoords()[1]))
 
-	def moveUp(self):
-		self.setTargetY(self.returnTargetY() - TILEWIDTH)
-		self.setStatus("walking") 
-		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] - 1))
-		#print(self.returnTileCoords())
-
-	def moveDown(self):
-		self.setTargetY(self.returnTargetY() + TILEWIDTH)
+	def moveUp(self, allTiles):
 		self.setStatus("walking")
-		self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] + 1))
-		#print(self.returnTileCoords())
+		self.setFace("up") 
+		stopWalking = False
+		for i in allTiles[2]:
+			if i.returnTileCoords()[1] - (self.returnTileCoords()[1] - 1) == 0 and i.returnTileCoords()[0] - (self.returnTileCoords()[0]) == 0 and i.returnIsWalkableOn() == False:
+				stopWalking = True
+		if not stopWalking:
+			self.setTargetY(self.returnTargetY() - TILEWIDTH)
+			self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] - 1))
+
+	def moveDown(self, allTiles):
+		self.setStatus("walking")
+		self.setFace("down")
+		stopWalking = False
+		for i in allTiles[2]:
+			if i.returnTileCoords()[1] - (self.returnTileCoords()[1] + 1) == 0 and i.returnTileCoords()[0] - (self.returnTileCoords()[0]) == 0 and i.returnIsWalkableOn() == False:
+				stopWalking = True
+		if not stopWalking:
+			self.setTargetY(self.returnTargetY() + TILEWIDTH)
+			self.setTileCoords((self.returnTileCoords()[0], self.returnTileCoords()[1] + 1))
 
 	def animation(self):
 		#Idle while facing down
@@ -415,14 +434,19 @@ class Character:
 		self.setWalkCoolDown(self.returnWalkCoolDown() - self.returnDelta())
 
 	#Drawing method
-	def draw(self, screen):
-		screen.blit(self.returnCurrentSprite().returnScaledPicture(), \
-			(self.returnX(), self.returnY()))
+	def draw(self, screen, cam):
 
-	def updateAll(self, screen):
+		imgToDraw = self.returnCurrentSprite().returnScaledPicture()
+		fx = self.returnX()
+		fy = self.returnY()
+
+		from pygame import Rect
+		screen.blit(imgToDraw, cam.apply(Rect(fx + SCALE*16, fy + SCALE*176, SCALE*16, SCALE*16) ) )
+
+	def updateAll(self, screen, cam):
 		self.updateTileClock()
 		self.animation()
-		self.draw(screen)
+		self.draw(screen, cam)
 
 	def getDirty(self, coordsList, amtOfTilesInWidth, amtofTilesInHeight):
 		dirt = []

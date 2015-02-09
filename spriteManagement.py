@@ -9,6 +9,7 @@ if os.name == 'nt':
 	MAIN_SPRITES = image.load("spriteSheet.gif")
 else:
 	MAIN_SPRITES = image.load("spriteSheet.bmp")
+	
 def redDownIdleAnim():
 	redDownIdle = BasicSprite("Red's down Idle anim.", MAIN_SPRITES, 481, 495, 387, 406, SCALE)
 	return redDownIdle

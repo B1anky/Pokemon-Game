@@ -96,13 +96,22 @@ class TileSprite:
 		if len(self.returnMovingTile()) == 0:
 			self.setCurrentTile(self.returnDefaultTile())
 
-	def draw(self, screen):
-		screen.blit(self.returnCurrentTile().returnScaledPicture(), \
-			(self.returnTileCoords()[0] * 5*16, self.returnTileCoords()[1] * 5*16))
+	def draw(self, screen, cam):
+		imgToDraw = self.returnCurrentTile().returnScaledPicture()
+		fx = self.returnTileCoords()[0] * 5*16
+		fy = self.returnTileCoords()[1] * 5*16
 
-	def updateAll(self, screen):
+		from pygame import Rect
+		screen.blit(imgToDraw, cam.apply(Rect(fx, fy, 5*16, 5*16) ) )
+	
+	def rect(self):
+		fx = self.returnTileCoords()[0] * 5*16
+		fy = self.returnTileCoords()[1] * 5*16
+		return Rect(fx, fy, 5*16, 5*16) 
+		
+	def updateAll(self, screen, cam):
 		self.animation()
-		self.draw(screen)
+		self.draw(screen, cam)
 
 	def __str__(self):
 		return  "Tile type: " + str(self.__tileType) + \
