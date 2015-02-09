@@ -33,6 +33,7 @@ def run():
 	#Immediately maximizes the screen upon starting, calls method in windowControl module
 	windowControl.SDL_Maximize()
 
+	'''
 	#Initializes the lists for blitting optimizations
 	allDirtyTilesList = []
 	coordsList = []
@@ -56,19 +57,22 @@ def run():
 			pass
 		#@tile.updateAll(screen, cam)
 		tx += 1
+		'''
 
 	while keepGoing:
 		screen.fill((0,0,0))
 		for tileList in allTiles:
-			for tiles  in tileList:
+			for tiles in tileList:
 				tiles.updateAll(screen, cam)
+		'''
+
 		#Updates the display/objects by calling the objects' class update methods
 
 		#Dirty tile optimizations, only updates necessary surrounding tile coords
 		#Helps CPU when scale is very low
 		#for dirtyObjectTilesList in allDirtyTilesList:
 			#for dirtyTupleCoords in dirtyObjectTilesList:
-				'''
+				
 				DTCx = dirtyTupleCoords[0]
 				DTCy = dirtyTupleCoords[1]
 				tile = masterTileList[DTCx][DTCy]
@@ -77,24 +81,25 @@ def run():
 				tile.updateAll(screen, cam)
 				coordsList = []
 				allDirtyTilesList = []
-				'''
+				
 				#for tiles in tileList2:
 					#if tiles.returnTileCoords() == dirtyTupleCoords:
 						#tiles.updateAll(screen, cam)
 						#coordsList = []
 						#allDirtyTilesList = []
+						'''
 
 		#Draws/updates characters
 		for character in objectLists[0]:
 			character.updateAll(screen, cam)
-			#NPCs can currently interact with nonemovable tiles correctly
+			#NPCs can currently interact with notWalkableOn tiles correctly
 			#character.moveLeft(allTiles)
 			#allDirtyTilesList.append(character.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
 		
 		#Draws/updates players
 		for player in objectLists[1]:
 			#allDirtyTilesList.append(player.getDirty(coordsList, size[0]//TILEWIDTH, size[1]//TILEWIDTH))
-			player.updateAllPlayers(screen, masterTileList, cam, allTiles)
+			player.updateAllPlayers(screen, cam, allTiles)
 			cam.update(player)
 			
 		time.Clock().tick(FPS)

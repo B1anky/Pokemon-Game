@@ -428,14 +428,15 @@ class Character:
 		}[dir]
 		return result
 
+	'''
 	def updateTileClock(self):
 		#This is for changing from pixel based to time based movement for tiles
 		self.setDelta(self.returnTileClock().tick()/100.0)		
 		self.setWalkCoolDown(self.returnWalkCoolDown() - self.returnDelta())
-
+		'''
+		
 	#Drawing method
 	def draw(self, screen, cam):
-
 		imgToDraw = self.returnCurrentSprite().returnScaledPicture()
 		fx = self.returnX()
 		fy = self.returnY()
@@ -444,10 +445,11 @@ class Character:
 		screen.blit(imgToDraw, cam.apply(Rect(fx + SCALE*16, fy + SCALE*176, SCALE*16, SCALE*16) ) )
 
 	def updateAll(self, screen, cam):
-		self.updateTileClock()
+		#self.updateTileClock()
 		self.animation()
 		self.draw(screen, cam)
 
+	'''
 	def getDirty(self, coordsList, amtOfTilesInWidth, amtofTilesInHeight):
 		dirt = []
 		borderingCoordsList = self.getBorderTileList(coordsList, amtOfTilesInWidth, amtofTilesInHeight)
@@ -459,6 +461,7 @@ class Character:
 
 		return dirt
 
+	
 	def getBorderTileList(self, coordsList, amtOfXTiles, amtOfYTiles):
 		i = self.returnTileCoords()[0] #width
 		j = self.returnTileCoords()[1] #height
@@ -498,6 +501,7 @@ class Character:
 			coordsList.append((i+1,j-1))
 		
 		return coordsList
+		'''
 
 	def __str__(self):
 		return  "\nName: " + str(self.__name)   + \
