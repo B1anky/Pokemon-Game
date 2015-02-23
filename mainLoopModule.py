@@ -5,6 +5,8 @@ import windowControl
 from scale import *
 from Camera import *
 FPS = 60
+TILE_DEBUG = 0
+
 
 #Main window loop which will blit everything to screen
 def run():
@@ -23,11 +25,12 @@ def run():
 	objectLists = playersAndMobs.createRed()
 
 	allTiles = []
-	tileList1 = mapManagement.createTown1Dirt()
-	tileList2 = mapManagement.createTown1Grass()
+	allTiles = mapManagement.createMaps()
+	tileList1 = mapManagement.getDirtList()
+	tileList2 = mapManagement.getGrassList()
 	tileList3 = mapManagement.createTown1Trees()
-	allTiles.append(tileList2)
-	allTiles.append(tileList1)
+	#allTiles.append(tileList2)
+	#allTiles.append(tileList1)
 	allTiles.append(tileList3)
 
 	#Immediately maximizes the screen upon starting, calls method in windowControl module
@@ -35,8 +38,10 @@ def run():
 
 	while keepGoing:
 		screen.fill((0,0,0))
-		for tile in tileList3:
-			print("Tile: " + str(tile.returnTileCoords()))
+		
+		if TILE_DEBUG:
+			for tile in tileList3:
+				print("Tile: " + str(tile.returnTileCoords()))
 		for tileList in allTiles:
 			for tiles in tileList:
 				tiles.updateAll(screen, cam)
@@ -50,7 +55,8 @@ def run():
 		#Draws/updates players
 		for player in objectLists[1]:
 			player.updateAllPlayers(screen, cam, allTiles)
-			print("player: " + str(player.returnTileCoords()))
+			if TILE_DEBUG:
+				print("player: " + str(player.returnTileCoords()))
 			cam.update(player)
 			
 		time.Clock().tick(FPS)

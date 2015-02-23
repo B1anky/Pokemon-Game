@@ -3,14 +3,51 @@ from TileSprite import TileSprite
 from pygame import *
 from scale import *
 
+MASTER_DIRT = []
+MASTER_GRASS = []
+
+def readMapFromFile(filename):
+	array2d = []
+	with open(filename) as file:
+		array2d = [[int(digit) for digit in line.strip()] for line in file]
+	print(array2d)
+	return array2d
+
 def createMaps():
-	createTown1()
+	twoDee = readMapFromFile('map.pkm')
+	return createTown1(twoDee)
 
-def createTown1():
-	createTown1Ground()
+def createTown1(twoDee):
+	List = []
+	MASTER_GRASS = []
+	MASTER_DIRT = []	
 
-def createTown1Ground():
-	createTown1Dirt()
+	for i in range(0, len(twoDee)):
+		for j in range(0, len(twoDee[i])):
+			key = switchStmt(twoDee[i][j])
+			if key == 'grass':
+				MASTER_GRASS.append(createSingleGrass(i,j))
+			if key == 'dirt':
+				MASTER_DIRT.append(createSingleDirt(i,j))
+			if key == 'tree':
+				print("adding tree")
+
+	List.append(MASTER_GRASS)
+	List.append(MASTER_DIRT)
+	return List
+
+def switchStmt(code):
+	return
+	{
+		0 : 'grass',
+		1 : 'dirt',
+		2 : 'tree',
+	}.get(x, 0)
+
+def getDirtList():
+	return MASTER_DIRT
+def getGrassList():
+	return MASTER_GRASS
 
 def createTown1Dirt():
 	dirtImage = tileManagement.createDirt()
@@ -62,3 +99,18 @@ def createTown1Trees():
 			finalTreeList.append(tree)
 	
 	return finalTreeList
+
+
+def createSingleGrass(x, y):
+	grassTileImage1 = tileManagement.createGrass1()
+	return (TileSprite(grassTileImage1, [], (x, y), (x * TILEWIDTH, y * TILEWIDTH), grassTileImage1, \
+				0, None, True, "Grass", [], [], 0))
+def createSingleDirt(x,y):
+	dirtImage = tileManagement.createDirt()
+	dirtList = []
+
+	dirtList.append(TileSprite(dirtImage, [], (15 ,15), ((15 * TILEWIDTH),(15 * TILEWIDTH)),\
+				dirtImage, 0, None, True, "Dirt", [], [], 0))
+	dirtList.append(TileSprite(dirtImage, [], (18 ,15), ((18 * TILEWIDTH),(15 * TILEWIDTH)),\
+				dirtImage, 0, None, True, "Dirt", [], [], 0))
+	return dirtList
