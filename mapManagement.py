@@ -10,7 +10,7 @@ def readMapFromFile(filename):
 	array2d = []
 	with open(filename) as file:
 		array2d = [[int(digit) for digit in line.strip()] for line in file]
-	print(array2d)
+	#print(array2d)
 	return array2d
 
 def createMaps():
@@ -24,25 +24,16 @@ def createTown1(twoDee):
 
 	for i in range(0, len(twoDee)):
 		for j in range(0, len(twoDee[i])):
-			key = switchStmt(twoDee[i][j])
-			if key == 'grass':
+			if twoDee[i][j] == 0:
 				MASTER_GRASS.append(createSingleGrass(i,j))
-			if key == 'dirt':
+			if twoDee[i][j] == 1:
 				MASTER_DIRT.append(createSingleDirt(i,j))
-			if key == 'tree':
+			if twoDee[i][j] == 2:
 				print("adding tree")
 
-	List.append(MASTER_GRASS)
 	List.append(MASTER_DIRT)
+	List.append(MASTER_GRASS)
 	return List
-
-def switchStmt(code):
-	return
-	{
-		0 : 'grass',
-		1 : 'dirt',
-		2 : 'tree',
-	}.get(x, 0)
 
 def getDirtList():
 	return MASTER_DIRT
@@ -103,8 +94,9 @@ def createTown1Trees():
 
 def createSingleGrass(x, y):
 	grassTileImage1 = tileManagement.createGrass1()
-	return (TileSprite(grassTileImage1, [], (x, y), (x * TILEWIDTH, y * TILEWIDTH), grassTileImage1, \
+	tile = (TileSprite(grassTileImage1, [], (x, y), (x * TILEWIDTH, y * TILEWIDTH), grassTileImage1, \
 				0, None, True, "Grass", [], [], 0))
+	return tile
 def createSingleDirt(x,y):
 	dirtImage = tileManagement.createDirt()
 	dirtList = []

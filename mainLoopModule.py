@@ -28,12 +28,15 @@ def run():
 	allTiles = mapManagement.createMaps()
 	tileList1 = mapManagement.getDirtList()
 	tileList2 = mapManagement.getGrassList()
+	
 	tileList3 = mapManagement.createTown1Trees()
+	
 	#allTiles.append(tileList2)
 	#allTiles.append(tileList1)
+	
 	allTiles.append(tileList3)
-
-	#Immediately maximizes the screen upon starting, calls method in windowControl module
+	
+	#Immediately maximizes the screen upon startioing, calls method in windowControl module
 	windowControl.SDL_Maximize()
 
 	while keepGoing:
@@ -44,7 +47,11 @@ def run():
 				print("Tile: " + str(tile.returnTileCoords()))
 		for tileList in allTiles:
 			for tiles in tileList:
-				tiles.updateAll(screen, cam)
+				if type(tiles) is list:
+					for evTile in tiles:
+						evTile.updateAll(screen, cam)
+				else:	
+					tiles.updateAll(screen, cam)
 
 		#Draws/updates characters
 		for character in objectLists[0]:
